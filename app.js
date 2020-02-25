@@ -6,8 +6,21 @@ const logger = require('morgan');
 const mongoose = require('mongoose')
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-
+const movieRouter = require('./routes/movieRoutes')
 const app = express();
+require('dotenv').config();
+mongoose
+    .connect(process.env.MONGODB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true
+    })
+    .then(() => {
+        console.log('MongoDB Connected');
+    })
+    .catch(err => console.log(`Mongodb Error: ${err}`));
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/movies', movieRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
