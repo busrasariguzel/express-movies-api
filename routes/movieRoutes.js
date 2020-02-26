@@ -3,8 +3,7 @@ const router = express.Router();
 const Movies = require('./models/Movies');
 
 
-// getting all movies 
-
+// gets all movies 
 router.get('/', (req, res) => {
     Movies.find({})
     .then((movies) => {
@@ -13,7 +12,7 @@ router.get('/', (req, res) => {
         //  return res.render('movies', {movies})
     }).catch(err => res.status(500).json({ message: 'Server Error', err }))
 })
-
+// gets the given movie only
 router.get('/:movie', (req,res)=> {
 Movies.findOne({movie:req.params.movie})
 .then((movie)=> {
@@ -25,7 +24,7 @@ Movies.findOne({movie:req.params.movie})
 }).catch(err=>res.status(400).json({message: 'server error', err}))
 });
 
-
+// get the path for add movies, it connects it with ejs file
 router.get('/addmovies', (req, res) => {
     return res.render('addMovies')
 });
@@ -64,7 +63,7 @@ router.post('/addmovies', (req, res) => {
         });
 });
 
-
+// deletes the movie by using the given path
 router.delete('/:movie', (req,res)=>{
 Movies.findOneAndDelete({movie:req.params.movie})
 .then((movies) => {
@@ -77,7 +76,26 @@ Movies.findOneAndDelete({movie:req.params.movie})
 .catch(err => res.status(400).json({message: 'Could not delete the movie', err}))
 });
 
+// this updated the movie
+router.put('/:movie', (req,res)=>{
+    Movies.findOne({movie:req.params.movie})
+    .then((movie)=> {
+        if(movie){
+            movie.rating = req.body.rating ? req.body.rating : movie.rating;
+            movie.box = req.body.box ? req.body.box : movie.box;
+            movie.synopsis = req.body.synopsis ? req.body.synopsis : movie.synopsis;
+            movie.release = req.body.release ? req.body.release : movie.release;
+            movie.genre = req.body.genre ? req.body.genre : movie.genre;
+            
 
-
+            movie.save()
+            .then(updated => {
+                return res.status(200).json({message:'Movie updated', updated}) 
+            }).catch(err=> res.status(400).json({message:'Movie not updated', err}))
+        } else {
+            return res.status(200).json({message: "Cannot find the movie"})
+        }
+    }).catch(err=> res.status(500).json({message:'server error', err}))
+})
 
 module.exports = router

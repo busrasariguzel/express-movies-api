@@ -6,6 +6,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
+        <h1>Add a Movie</h1>
+        <form action="/movies/addmovies" method="POST">
+            <label for='movie'>Word</label><br>
+            <input type="text" id="movie" name="movie" placeholder="movie"> <br>
+
+            <label for="movie"   >Definition</label> <br>
+            <textarea 
+            name="movie"
+            cols="50"
+            rows="20"
+            ></textarea><br>
+            <button type="submit"> Add the movie</button>
+
+        </form>
         
     </body>
 </html>
