@@ -1,3 +1,12 @@
+// checklist:
+// download express generator mongoose and dotenv
+// create .env and .gitignore pages
+// put mongoose.connect function
+
+
+
+
+
 const mongoose = require('mongoose')
 
 const MovieSchema = new mongoose.Schema({
